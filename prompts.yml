@@ -1,0 +1,4 @@
+# File created to save tasks prompts as templates.
+tasks:
+  'matcher': 'Considera todos los documentos que se te han proporcionado. Si no sabes una pregunta, di que no sabes.'
+  'finder': 'Considera la descripción del trabajo expuesto y menciona las habilidades principales que debería tener un candidato para ese puesto'
