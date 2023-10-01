@@ -17,7 +17,7 @@ def loader_docs(model_embed):
         model = model_embed,
         chunk_size = 1000,
     )
-    loader = DirectoryLoader(path='comments_file/', glob='*.txt', loader_cls=TextLoader)
+    loader = DirectoryLoader(path='./comments_file/', glob='*.txt', loader_cls=TextLoader)
     docs = loader.load()
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
@@ -64,6 +64,8 @@ def make_chain(model, temperature, vectordb, query_user):
     )
 
     response = qa_chain(prompt_value)
+
+    
     return response['answer']
 
 

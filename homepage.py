@@ -53,13 +53,14 @@ def app_info():
 		# {app_name}
 		version: {__version__}
 		
-		A Job - Employee matcher system built using LangChain and ChatGPT.
+		A system that classifies social media comments and suggests a response.
 		""")
 	app_spacer(1)
 	st.write("Made by [Kim Valenzuela](https://github.com/KimValenzuela/). Supported by EY-Chile Training Team.", unsafe_allow_html=True)
 	app_spacer(1)
 	st.markdown("""
-		This proyect was built as example for a training session framed in the EY-Python Chile Hackathon 2023.
+		This project was built as example for a training session framed in the Summit País Digital Hackatón by EY-Microsoft.
+.
 		""")
 	app_spacer(1)
 	st.markdown('')
@@ -168,24 +169,44 @@ def get_comment_clasification(client, pk, context):
 		sent_analysis.append(response)
 
 
+
 	return sent_analysis
 
 def create_chart(c):
-	labels = 'Positivo', 'Neutral', 'Negativo'
-	sizes = [c.count('Bueno'), c.count('Neutral'), c.count('Malo')]
+    labels = ['Positivo', 'Neutral', 'Negativo']
+    
+    bueno_count = c.count('Bueno')
+    neutral_count = c.count('Neutral')
+    malo_count = c.count('Malo')
+    
+    sizes = [bueno_count, neutral_count, malo_count]
+    colors = ['#F7B800', '#00A6ED', '#EF3340']
+    font_color = '#deece8'
 
-	fig1, ax1 = plt.subplots()
-	colors = ['#68b955', '#55b9a1', '#e59b8b'] 
-	font_color = '#deece8'
-	ax1.pie(sizes, 
-			labels=labels, 
-           	startangle=30, 
-			wedgeprops=dict(width=.6), # For donuts
-			colors=colors, 
-			autopct='%1.1f%%',
-			textprops={'color':font_color})
-	fig1.savefig('pie.png', transparent=True)
-	st.image('pie.png')
+    fig, ax = plt.subplots()
+    ax.bar(labels, 
+            sizes, 
+            color=colors,
+            alpha=0.7, edgecolor=font_color, linewidth=1.2
+		)
+	
+    for i, size in enumerate(sizes):
+        ax.text(i, size, str(size), ha='center', va='bottom', color=font_color, fontsize=10)
+
+    ax.set_ylabel('Cantidad', fontsize=14, color=font_color)
+    ax.set_title('Análisis de sentimientos', fontsize=14, color=font_color)
+    plt.tight_layout()
+
+    ax.set_xticks(labels)
+    ax.set_xticklabels(labels, fontsize=12, color=font_color) 
+    ax.set_ylim(0, max(sizes) + 1)  
+    ax.tick_params(axis='y', colors='white')
+    ax.yaxis.grid(color='white', linestyle='--', linewidth=0.5)
+
+    fig.savefig('pie.png', transparent=True)
+
+    fig.savefig('pie.png', transparent=True)
+    st.image('pie.png')
 
 
 def main_screen(client):

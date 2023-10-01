@@ -3,9 +3,9 @@ import yaml
 from yaml.loader import SafeLoader
 from homepage import main_screen
 from dotenv import load_dotenv
+import os
 
 def main():
-    
     load_dotenv()
 
     with open('credentials.yml') as f:

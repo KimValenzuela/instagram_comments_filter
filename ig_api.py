@@ -9,6 +9,7 @@ def get_posts(client, link):
 
 def show_posts(client, media_pk):
     media_info = client.media_info(media_pk)
+
     try:
         url_image = media_info.image_versions2['candidates'][0]['url']
         urllib.request.urlretrieve(url_image, 'post.png')
@@ -30,7 +31,7 @@ def get_comments(client, pk_media):
         media_comments.append(comment.text)
     #print(media_comments)
 
-    with open('comments_file/comments.txt', 'w') as f:
+    with open('comments_file/comments.txt', 'w', encoding="utf-8") as f:
         for i in media_comments:
             f.write(i + '\n')
 
@@ -39,7 +40,7 @@ def get_comments(client, pk_media):
 def sentiment_analysis(context, comment, model, temperature):
     template_query = """
     Debes realizar un análisis de sentimiento a un comentario que hizo un usuario sobre mi post en instagram.
-    El post es sobre el siguiente tema: {post_context} y necesito que clasifiques el comentario dentro de las siguientes opciones: Bueno, Neutral, Malo u Odio. 
+    El post es sobre el siguiente tema: {post_context} y necesito que clasifiques el comentario dentro de las siguientes opciones: Bueno, Neutral o Malo. 
     La diferencia entre un comentario Malo y uno de Odio, es que el comentario Malo puede ser alusivo a que el usuario no le gusta la publicación o no le parece bien, mientras 
     que un comentario de odio es un ataque a la persona.
     Comentario: {user_comment}
@@ -59,6 +60,7 @@ def sentiment_analysis(context, comment, model, temperature):
 
 
 def response_comments(context, comment, model, temperature):
+
     template_query = """
     Este es un post de instagram sobre el siguiente tema: {post_context}.
     Necesito que respondas el comentario que ha dejado un usuario. Si el comentario no tiene sentido, no respondas nada. 
@@ -74,12 +76,14 @@ def response_comments(context, comment, model, temperature):
     )
 
     response = llm(prompt_value)
+
     return response
 
 
 def res_comment(context, comments, model, temperature):
     comment = []
     response = []
+
     for comm in comments:
         comment.append(comm)
         resp = response_comments(context, comm, model, temperature)
